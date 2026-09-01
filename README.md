@@ -29,12 +29,6 @@ Chrome extension to collect localization strings from GitHub pull requests.
 4. Select this folder
 5. Note your extension ID
 
-### 2. Use Smart Merge
-
-1. Go to GitHub PR with XML string changes
-2. Click extension icon → "Collect Strings"
-3. Click "Download CSV"
-
 ## Requirements
 
 - Chrome browser
