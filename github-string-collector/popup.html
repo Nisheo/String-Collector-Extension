@@ -56,87 +56,6 @@
             cursor: not-allowed;
         }
 
-        .button-group {
-            margin-top: 12px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .button-group button {
-            margin-top: 0;
-            padding: 8px;
-            font-size: 13px;
-        }
-
-        #downloadCSVButton {
-            background: #17a2b8;
-        }
-
-        #downloadCSVButton:hover {
-            background: #138496;
-        }
-
-        #mergeHelperButton {
-            background: #fd7e14;
-        }
-
-        #mergeHelperButton:hover {
-            background: #e8690b;
-        }
-
-        .helper-box {
-            display: none;
-            margin-top: 12px;
-            padding: 12px;
-            background: #fff8e6;
-            border: 1px solid #fb8500;
-            border-radius: 6px;
-            font-size: 12px;
-        }
-
-        .helper-box h4 {
-            margin: 0 0 8px 0;
-            color: #fb8500;
-            font-size: 13px;
-        }
-
-        .helper-box code {
-            display: block;
-            background: white;
-            padding: 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 11px;
-            margin: 8px 0;
-            overflow-x: auto;
-        }
-
-        .helper-box ol {
-            margin: 8px 0;
-            padding-left: 20px;
-        }
-
-        .helper-box li {
-            margin: 4px 0;
-        }
-
-        .copy-formula-btn {
-            width: 100%;
-            padding: 6px;
-            background: #0366d6;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            margin-top: 4px;
-        }
-
-        .copy-formula-btn:hover {
-            background: #0256c7;
-        }
-
         #status {
             margin-top: 12px;
             font-weight: bold;
@@ -275,17 +194,6 @@
     <button id="copyButton" style="display: none;">
         Copy as Markdown
     </button>
-
-    <div class="button-group" style="display: none;" id="smartExportGroup">
-        <button id="downloadCSVButton">
-            📥 Download CSV
-        </button>
-        <button id="mergeHelperButton">
-            🧮 Merge Helper
-        </button>
-    </div>
-
-    <div id="mergeHelperBox" class="helper-box"></div>
 
     <div id="output"></div>
 

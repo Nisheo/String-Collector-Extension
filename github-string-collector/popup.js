@@ -1,9 +1,5 @@
 const collectButton = document.getElementById("collectButton");
 const copyButton = document.getElementById("copyButton");
-const downloadCSVButton = document.getElementById("downloadCSVButton");
-const mergeHelperButton = document.getElementById("mergeHelperButton");
-const smartExportGroup = document.getElementById("smartExportGroup");
-const mergeHelperBox = document.getElementById("mergeHelperBox");
 const status = document.getElementById("status");
 
 let currentData = null;
@@ -127,7 +123,6 @@ collectButton.addEventListener("click", async function () {
             // Store data and show buttons
             currentData = data;
             copyButton.style.display = 'block';
-            smartExportGroup.style.display = 'grid';
         }
     } catch (error) {
 
@@ -166,64 +161,6 @@ copyButton.addEventListener("click", async function () {
     }
 });
 
-// Download CSV button handler
-downloadCSVButton.addEventListener("click", async function () {
-    if (!currentData || currentData.totalStrings === 0) {
-        status.textContent = "No data to download!";
-        return;
-    }
-    
-    try {
-        const csv = generateSmartCSV(currentData.strings);
-        downloadFile(csv, 'github-strings-' + getCurrentDate() + '.csv', 'text/csv');
-        
-        // Show success feedback
-        const originalText = downloadCSVButton.textContent;
-        downloadCSVButton.textContent = "Downloaded!";
-        downloadCSVButton.style.background = "#28a745";
-        
-        setTimeout(() => {
-            downloadCSVButton.textContent = originalText;
-            downloadCSVButton.style.background = "";
-        }, 2000);
-        
-    } catch (error) {
-        console.error("Download error:", error);
-        status.textContent = "Failed to download: " + error.message;
-    }
-});
-
-// Merge Helper button handler
-mergeHelperButton.addEventListener("click", function () {
-    if (!currentData || currentData.totalStrings === 0) {
-        status.textContent = "No data to show helper!";
-        return;
-    }
-    
-    // Toggle helper box
-    if (mergeHelperBox.style.display === 'block') {
-        mergeHelperBox.style.display = 'none';
-        mergeHelperButton.textContent = '🧮 Merge Helper';
-    } else {
-        mergeHelperBox.innerHTML = generateMergeHelperContent(currentData.strings);
-        mergeHelperBox.style.display = 'block';
-        mergeHelperButton.textContent = '✖️ Close Helper';
-        
-        // Add event listener for copy formula button
-        const copyFormulaBtn = document.getElementById('copyFormulaBtn');
-        if (copyFormulaBtn) {
-            copyFormulaBtn.addEventListener('click', async function() {
-                const formula = this.getAttribute('data-formula');
-                await navigator.clipboard.writeText(formula);
-                this.textContent = 'Copied!';
-                setTimeout(() => {
-                    this.textContent = 'Copy Formula';
-                }, 2000);
-            });
-        }
-    }
-});
-
 function generateMarkdownTable(strings) {
     if (strings.length === 0) {
         return "No strings found.";
@@ -255,119 +192,6 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
-
-function generateSmartCSV(strings) {
-    // Create CSV with headers optimized for Excel merge
-    let csv = 'Key,New Value,Status,Action\n';
-    
-    strings.forEach(str => {
-        const key = escapeCsv(str.key);
-        const value = escapeCsv(str.value);
-        const status = str.status.charAt(0).toUpperCase() + str.status.slice(1);
-        
-        let action = '';
-        if (str.status === 'added') {
-            action = 'ADD NEW ROW';
-        } else if (str.status === 'modified') {
-            action = 'UPDATE VALUE';
-        } else if (str.status === 'deleted') {
-            action = 'REVIEW/DELETE';
-        }
-        
-        csv += `${key},${value},${status},${action}\n`;
-    });
-    
-    return csv;
-}
-
-function generateMergeHelperContent(strings) {
-    // Determine the range based on number of strings
-    const rowCount = strings.length;
-    const endRow = rowCount + 1; // +1 for header
-    
-    // Generate XLOOKUP formula (modern Excel)
-    const xlookupFormula = `=IFERROR(XLOOKUP(A2,NewData!A:A,NewData!B:B),B2)`;
-    
-    // Generate VLOOKUP formula (older Excel)
-    const vlookupFormula = `=IFERROR(VLOOKUP(A2,NewData!A:B,2,0),B2)`;
-    
-    // Generate INDEX-MATCH formula (most compatible)
-    const indexMatchFormula = `=IFERROR(INDEX(NewData!B:B,MATCH(A2,NewData!A:A,0)),B2)`;
-    
-    const html = `
-        <h4>📊 Smart Excel Merge Guide</h4>
-        <p><strong>You have ${strings.length} strings to merge.</strong></p>
-        
-        <p><strong>Quick Steps:</strong></p>
-        <ol>
-            <li>Download CSV (click button above)</li>
-            <li>Open your Excel file</li>
-            <li>Import CSV as new sheet called "NewData"</li>
-            <li>In your main sheet, add helper column (e.g., column C)</li>
-            <li>Use one of these formulas in C2:</li>
-        </ol>
-        
-        <p><strong>Option 1: XLOOKUP (Excel 365)</strong></p>
-        <code>${xlookupFormula}</code>
-        <button class="copy-formula-btn" id="copyFormulaBtn" data-formula="${xlookupFormula}">Copy Formula</button>
-        
-        <p><strong>Option 2: VLOOKUP (All Excel versions)</strong></p>
-        <code>${vlookupFormula}</code>
-        
-        <p><strong>Option 3: INDEX-MATCH (Most reliable)</strong></p>
-        <code>${indexMatchFormula}</code>
-        
-        <p><strong>What the formula does:</strong></p>
-        <ul>
-            <li>Looks up the Key (A2) in NewData sheet</li>
-            <li>If found → returns the new value</li>
-            <li>If not found → keeps existing value (B2)</li>
-        </ul>
-        
-        <p><strong>Final Steps:</strong></p>
-        <ol>
-            <li>Copy formula down to all rows</li>
-            <li>Copy column C → Paste Values to column B</li>
-            <li>Delete helper column C and NewData sheet</li>
-            <li>Done! ✅</li>
-        </ol>
-        
-        <p style="font-size: 11px; color: #666; margin-top: 12px;">
-            💡 <strong>Tip:</strong> Add ${strings.filter(s => s.status === 'added').length} new rows at the end for "Added" strings.
-        </p>
-    `;
-    
-    return html;
-}
-
-function escapeCsv(text) {
-    // Escape CSV special characters
-    text = text.replace(/"/g, '""'); // Escape quotes
-    if (text.includes(',') || text.includes('\n') || text.includes('"')) {
-        text = `"${text}"`; // Wrap in quotes if contains special chars
-    }
-    return text;
-}
-
-function downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function getCurrentDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
 }
 
 function collectGitHubPage() {
