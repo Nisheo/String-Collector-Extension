@@ -177,7 +177,7 @@ function generateMarkdownTable(strings) {
         if (str.status === 'modified') {
             const oldVal = str.oldValue.replace(/\|/g, '\\|').replace(/\n/g, ' ');
             const newVal = str.value.replace(/\|/g, '\\|').replace(/\n/g, ' ');
-            value = `~~${oldVal}~~ → ${newVal}`;
+            value = `~~${oldVal}~~  ${newVal}`;
         } else {
             value = str.value.replace(/\|/g, '\\|').replace(/\n/g, ' ');
         }
