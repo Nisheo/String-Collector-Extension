@@ -1,0 +1,26 @@
+github-string-collector/js/README.md
+  h_e8a94bae6c733a 1-66
+github-string-collector/js/formatter.js
+  h_e8a94bae6c733a 1-35
+github-string-collector/js/ui-renderer.js
+  h_e8a94bae6c733a 1-91
+github-string-collector/js/github-collector.js
+  h_e8a94bae6c733a 1-239
+github-string-collector/js/utils.js
+  h_e8a94bae6c733a 1-68
+github-string-collector/js/popup.js
+  h_e8a94bae6c733a 1-99
+github-string-collector/popup.html
+  h_e8a94bae6c733a 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "63b777efb4c484a1c67beaa8b5415b68b3ec80f9",
+  "prompts": {},
+  "humans": {
+    "h_e8a94bae6c733a": {
+      "author": "Nishu <nishu.yadav@philips.com>"
+    }
+  }
+}
