@@ -46,10 +46,16 @@ async function handleCollect() {
             func: collectGitHubPage
         });
 
-        const data = result[0].result;
+        const scriptResult = result && result[0] ? result[0] : null;
+        const data = scriptResult ? scriptResult.result : null;
+
+        if (scriptResult && scriptResult.error) {
+            status.textContent = "Collector error: " + scriptResult.error;
+            return;
+        }
 
         if (!data) {
-            status.textContent = "No data returned.";
+            status.textContent = "No data returned from collector.";
             return;
         }
 
