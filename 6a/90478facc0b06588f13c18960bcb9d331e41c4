@@ -1,0 +1,16 @@
+github-string-collector/popup.html
+  h_e8a94bae6c733a 5
+github-string-collector/popup.css
+  h_e8a94bae6c733a 1-172
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "6a90478facc0b06588f13c18960bcb9d331e41c4",
+  "prompts": {},
+  "humans": {
+    "h_e8a94bae6c733a": {
+      "author": "Nishu <nishu.yadav@philips.com>"
+    }
+  }
+}
