@@ -5,8 +5,11 @@
   "description": "Collect localization strings from GitHub pull requests.",
   "permissions": [  
     "activeTab",
-    "scripting",
     "storage"
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://patch-diff.githubusercontent.com/*"
   ],
   "action": {
     "default_popup": "popup.html"

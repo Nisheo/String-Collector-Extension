@@ -28,14 +28,12 @@ This directory contains the modularized JavaScript code for the GitHub String Co
 - `generateStatusBadge()` - Creates status badge HTML
 - `generateValueCell()` - Formats value cells based on status
 
-### 🔍 `github-collector.js`
-**GitHub Page Parsing**
-- `collectGitHubPage()` - Main collection function (runs as content script)
-- `parseStringTag()` - Extracts string data from XML tags
-- `collectDiagnostics()` - Gathers page structure information
-- `parseFromDOMElements()` - Parses strings from DOM elements
-- `parseFromRawText()` - Fallback parsing from raw text
-- `buildFinalStrings()` - Determines string status and builds result
+### 🔍 `github-diff-collector.js`
+**GitHub Pull Request Parsing**
+- `collectGitHubPage()` - Fetches the authenticated pull request diff
+- Filters changes to approved localization file paths
+- Parses Android XML and Apple `.strings` entries
+- Builds added, modified, and deleted string results
 
 ## Module Dependencies
 
@@ -45,7 +43,7 @@ popup.js
 ├── formatter.js
 ├── ui-renderer.js
 │   └── utils.js
-└── github-collector.js
+└── github-diff-collector.js
 ```
 
 ## Architecture
@@ -53,7 +51,7 @@ popup.js
 The code follows a modular architecture with clear separation of concerns:
 
 1. **Presentation Layer** (`ui-renderer.js`) - Handles all UI rendering
-2. **Business Logic Layer** (`github-collector.js`) - Core parsing and collection logic
+2. **Business Logic Layer** (`github-diff-collector.js`) - Core diff parsing and collection logic
 3. **Utility Layer** (`utils.js`, `formatter.js`) - Reusable helper functions
 4. **Application Layer** (`popup.js`) - Orchestrates everything together
 

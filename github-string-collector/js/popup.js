@@ -5,7 +5,12 @@
 import { countByStatus, generateStatusText, showButtonFeedback } from './utils.js';
 import { generateMarkdownTable } from './formatter.js';
 import { renderEmptyState, renderDataTable } from './ui-renderer.js';
-import { collectGitHubPage } from './github-collector.js';
+import { collectGitHubPage } from './github-diff-collector.js';
+
+const TARGET_FILE_PATHS = [
+    "en-GB.lproj/Localizable.strings",
+    "lumeaBase/src/main/res/values/strings.xml"
+];
 
 // DOM element references
 const collectButton = document.getElementById("collectButton");
@@ -41,18 +46,11 @@ async function handleCollect() {
             return;
         }
 
-        const result = await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: collectGitHubPage
-        });
-
-        const scriptResult = result && result[0] ? result[0] : null;
-        const data = scriptResult ? scriptResult.result : null;
-
-        if (scriptResult && scriptResult.error) {
-            status.textContent = "Collector error: " + scriptResult.error;
-            return;
-        }
+        const data = await collectGitHubPage(
+            tab.url,
+            TARGET_FILE_PATHS,
+            tab.title || ""
+        );
 
         if (!data) {
             status.textContent = "No data returned from collector.";
@@ -65,6 +63,8 @@ async function handleCollect() {
 
         // Render output
         if (data.totalStrings === 0) {
+            currentData = null;
+            copyButton.style.display = 'none';
             output.innerHTML = renderEmptyState();
         } else {
             output.innerHTML = renderDataTable(data.strings);

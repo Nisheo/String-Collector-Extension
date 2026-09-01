@@ -11,8 +11,8 @@ import { escapeHtml } from './utils.js';
 export function renderEmptyState() {
     return `
         <div class="empty-state">
-            <p><strong>No XML strings found in added lines.</strong></p>
-            <p style="font-size: 11px; margin-top: 8px;">Make sure you're on the Files changed tab with visible diffs.</p>
+            <p><strong>No localization strings found in the target files.</strong></p>
+            <p style="font-size: 11px; margin-top: 8px;">Make sure this PR changes one of the configured localization files.</p>
         </div>
     `;
 }
