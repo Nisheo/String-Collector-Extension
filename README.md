@@ -59,7 +59,6 @@ To test locally:
 
 **Future Ideas:**
 - [ ] Show which files strings came from
-- [ ] Support for iOS .strings format
 - [ ] Batch processing multiple PRs
 
 ---
